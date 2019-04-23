@@ -89,23 +89,30 @@ def response_handling(training_intents):
         featureset.append(features)
     return featureset
 
+
 def enconde_response(training_intents):
     featureset=[]
     for intent in training_intents:
         if intent[0]== 1:
-            res=1
-        else:
             res=0
+        elif intent[1]== 1:
+            res=1
+        else:    
+            res=2
         featureset.append(res)
     return featureset
 
+
 def response(user_input,lexicon,model):
     user_input=sample_handling(third_preprocess(second_preprocess(preprocess_reviews([user_input]))),lexicon)
-    if model.predict(user_input)[0]==1:
+    if model.predict(user_input)[0]==0:
         res="Pasta con salmon!"
-    else:
+    elif model.predict(user_input)[0]==1:
         res="A las 6 pm."
+    else:
+        res="Saludos!"
     return res
+
 
 
 lr = pickle.load(open('lr.pkl','rb'))
