@@ -23,8 +23,12 @@ training_sentences = [
     "Cuanto tiempo estaras?",
     "A que hora nos encontraremos?",
     "Por que estas tomando tanto tiempo?",
-    "A que hora estarás aya?"
-    
+    "A que hora estarás aya?",
+    "Hola",
+    "Hola, como estas?",
+    "Buen días",
+    "Buenas tardes",
+    "Buenas noches" 
 ]
 training_intents = [
     "dinner_preference",
@@ -36,7 +40,12 @@ training_intents = [
     "arrival_time",
     "arrival_time",
     "arrival_time",
-    "arrival_time"   
+    "arrival_time",
+    "hello",
+    "hello",
+    "hello",
+    "hello",
+    "hello" 
 ]
 
 import re
@@ -131,9 +140,11 @@ def enconde_response(training_intents):
     featureset=[]
     for intent in training_intents:
         if intent[0]== 1:
-            res=1
-        else:
             res=0
+        elif intent[1]== 1:
+            res=1
+        else:    
+            res=2
         featureset.append(res)
     return featureset
             
@@ -148,7 +159,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 X_train, X_val, y_train, y_val = train_test_split(
-    base_x, base_y, train_size = 0.75)
+    base_x, base_y, train_size = 0.8)
 
 
 for c in [0.01, 0.05, 0.25, 0.5, 1]:    
@@ -160,10 +171,12 @@ lr.coef_
 
 def response(user_input,lexicon,model):
     user_input=sample_handling(third_preprocess(second_preprocess(preprocess_reviews([user_input]))),lexicon)
-    if model.predict(user_input)[0]==1:
+    if model.predict(user_input)[0]==0:
         res="Pasta con salmon!"
-    else:
+    elif model.predict(user_input)[0]==1:
         res="A las 6 pm."
+    else:
+        res="Saludos!"
     return res
 
 print(response('Comida Comidaaa',lexicon,lr))
@@ -172,8 +185,12 @@ print(response('Ques es el tiempo?',lexicon,lr))
 print(response('TIEMPOOO',lexicon,lr))
 print(response('hora de ir al cine ',lexicon,lr))
 print(response('hola hola ',lexicon,lr))
+print(response('Buen día ',lexicon,lr))
 
 
 pickle.dump(lr, open('lr.pkl','wb'))
 pickle.dump(lexicon, open('lexicon.pkl','wb'))
+
+
+
 
