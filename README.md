@@ -17,4 +17,5 @@ Con con un enconder , codificamos las respuesta y preguntas
 Con K means se hace cluster de frases de respuesta
 Se hace un modelo regresionando las respuestas codificadas y el codigo del cluster
 La respuesta es el cluster, de ese cluster (bolsa) elegimos una respuesta al azar
+Es mucho mas dinamico que el primer modelo , se alimenta tanto de las preguntas y las respuestas
 
