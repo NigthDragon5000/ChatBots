@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Apr 22 22:30:08 2019
-
-@author: JAIR
-"""
 
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
@@ -13,40 +7,82 @@ import pickle
 stop_words=stopwords.words('spanish')
 stemmer = SnowballStemmer('spanish')
 
+
 training_sentences = [
-    "Que quieres comer para la cena?",
-    "Que quieres comer esta noche?",
-    "No se que comer esta noche.",
-    "No tendras cangrejos?",
-    "Te llevo algo de comer?", 
-    "A que hora estaras en casa",
-    "Cuanto tiempo estaras?",
-    "A que hora nos encontraremos?",
-    "Por que estas tomando tanto tiempo?",
-    "A que hora estarás aya?",
+    "Cual es la tasa de interes?",
+    "Cual es la tasa de sus productos?",
+    "Cual es la tasa de los productos CASH",
+    "Como puedo saber la TCEA del crédito?",
+    "quiero un crédito", 
+    "Puedo acceder a un credito?",
+    "Es dificíl acceder a un crédito?",
+    "Como puedo acceder a un crédito?",
+    "Quiero un prestamo?",
+    "quiero un credito",
     "Hola",
     "Hola, como estas?",
     "Buen días",
     "Buenas tardes",
     "Buenas noches" 
 ]
+
+
 training_intents = [
-    "dinner_preference",
-    "dinner_preference",
-    "dinner_preference",
-    "dinner_preference",
-    "dinner_preference",
-    "arrival_time",
-    "arrival_time",
-    "arrival_time",
-    "arrival_time",
-    "arrival_time",
+    "interes_preference",
+    "interes_preference",
+    "interes_preference",
+    "interes_preference",
+    "interes_preference",
+    "credito",
+    "credito",
+    "credito",
+    "credito",
+    "credito",
     "hello",
     "hello",
     "hello",
     "hello",
     "hello" 
 ]
+
+
+#
+#training_sentences = [
+#    "Que quieres comer para la cena?",
+#    "Que quieres comer esta noche?",
+#    "No se que comer esta noche.",
+#    "No tendras cangrejos?",
+#    "Te llevo algo de comer?", 
+#    "A que hora estaras en casa",
+#    "Cuanto tiempo estaras?",
+#    "A que hora nos encontraremos?",
+#    "Por que estas tomando tanto tiempo?",
+#    "A que hora estarás aya?",
+#    "Hola",
+#    "Hola, como estas?",
+#    "Buen días",
+#    "Buenas tardes",
+#    "Buenas noches" 
+#]
+#
+#
+#training_intents = [
+#    "dinner_preference",
+#    "dinner_preference",
+#    "dinner_preference",
+#    "dinner_preference",
+#    "dinner_preference",
+#    "arrival_time",
+#    "arrival_time",
+#    "arrival_time",
+#    "arrival_time",
+#    "arrival_time",
+#    "hello",
+#    "hello",
+#    "hello",
+#    "hello",
+#    "hello" 
+#]
 
 import re
 REPLACE_NO_SPACE = re.compile("[.;:!\'?,\"()\[\]]")
@@ -98,6 +134,7 @@ def third_preprocess(reviews_train_clean):
 
 reviews_train_clean3 = third_preprocess(reviews_train_clean2)
 
+
 # Creandon un lexicon
 def create_lexicon(reviews_train_clean):
     lexicon = []
@@ -109,6 +146,7 @@ def create_lexicon(reviews_train_clean):
 
 
 lexicon =create_lexicon(reviews_train_clean3)
+
 
 def sample_handling(reviews_train_clean,lexicon):
     featureset = []
@@ -159,7 +197,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 
 X_train, X_val, y_train, y_val = train_test_split(
-    base_x, base_y, train_size = 0.8)
+    base_x, base_y, train_size = 0.6)
 
 
 for c in [0.01, 0.05, 0.25, 0.5, 1]:    
@@ -172,20 +210,17 @@ lr.coef_
 def response(user_input,lexicon,model):
     user_input=sample_handling(third_preprocess(second_preprocess(preprocess_reviews([user_input]))),lexicon)
     if model.predict(user_input)[0]==0:
-        res="Pasta con salmon!"
+        res="Revisar la tasa de interes en la pagina web"
     elif model.predict(user_input)[0]==1:
-        res="A las 6 pm."
+        res="Depende de una evaluación crediticia"
     else:
         res="Saludos!"
     return res
 
-print(response('Comida Comidaaa',lexicon,lr))
-print(response('A que hora llegaras?',lexicon,lr))
-print(response('Ques es el tiempo?',lexicon,lr))
-print(response('TIEMPOOO',lexicon,lr))
-print(response('hora de ir al cine ',lexicon,lr))
-print(response('hola hola ',lexicon,lr))
-print(response('Buen día ',lexicon,lr))
+
+print(response('quiero un credito',lexicon,lr))
+print(response('Cual es la tasa?',lexicon,lr))
+print(response('Hola',lexicon,lr))
 
 
 pickle.dump(lr, open('lr.pkl','wb'))
